@@ -1,7 +1,7 @@
-from blockcipher import *
-import Crypto.Cipher.ARC2
 import Crypto
-from pkg_resources import parse_version
+import Crypto.Cipher.ARC2
+from blockcipher import *
+
 
 def new(key,mode=MODE_ECB,IV=None,counter=None,segment_size=None,effective_keylen=None):
     """Create a new cipher object
@@ -42,12 +42,9 @@ def new(key,mode=MODE_ECB,IV=None,counter=None,segment_size=None,effective_keyle
 class ARC2(BlockCipher):
     def __init__(self,key,mode,IV,counter,effective_keylen,segment_size):
         # pycrypto versions newer than 2.0.1 will have support for "effective_keylen"
-        if parse_version(Crypto.__version__) <= parse_version("2.0.1"):
-            cipher_module = Crypto.Cipher.ARC2.new
-            args = {}
-        else:
-            cipher_module = Crypto.Cipher.ARC2.new
-            args = {'effective_keylen':effective_keylen}
+
+        cipher_module = Crypto.Cipher.ARC2.new
+        args = {'effective_keylen':effective_keylen}
         self.blocksize = 8
         BlockCipher.__init__(self,key,mode,IV,counter,cipher_module,segment_size,args)
 

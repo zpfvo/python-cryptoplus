@@ -1,20 +1,33 @@
 #!/usr/bin/env python
 
-from pkg_resources import require
-require("CryptoPlus>=1.0")
-from CryptoPlus.testvectors import dict_ofb_aes, dict_ctr_aes, dict_cfb_aes, dict_cbc_aes
-from CryptoPlus.testvectors import dict_cmac_aes128,dict_cmac_aes192,dict_cmac_aes256,dict_cmac_tdes2,dict_cmac_tdes3
-from CryptoPlus.testvectors import dict_des,dict_tdes2,dict_tdes3
-from CryptoPlus.testvectors import dict_serpent128,dict_serpent192,dict_serpent256
-from CryptoPlus.testvectors import dict_xts_aes
-from CryptoPlus.testvectors import sha512_all_zero_messages, radiogatun32, radiogatun64
+from CryptoPlus.Cipher import (python_AES, python_DES, python_DES3,
+                               python_PRESENT, python_Serpent, python_Twofish)
+from CryptoPlus.Hash import python_RadioGatun, python_SHA512
+from CryptoPlus.testvectors import (dict_cbc_aes, dict_cfb_aes,
+                                    dict_cmac_aes128, dict_cmac_aes192,
+                                    dict_cmac_aes256, dict_cmac_tdes2,
+                                    dict_cmac_tdes3, dict_ctr_aes, dict_des,
+                                    dict_ofb_aes, dict_present_e80_k12_tvar,
+                                    dict_present_e80_kvar_t12,
+                                    dict_present_e128_k12_tvar,
+                                    dict_present_e128_kvar_t12,
+                                    dict_serpent128, dict_serpent192,
+                                    dict_serpent256, dict_tdes2, dict_tdes3,
+                                    dict_twofish_ecb_vk_k128,
+                                    dict_twofish_ecb_vk_k192,
+                                    dict_twofish_ecb_vk_k256,
+                                    dict_twofish_ecb_vt_k128,
+                                    dict_twofish_ecb_vt_k192,
+                                    dict_twofish_ecb_vt_k256, dict_xts_aes,
+                                    radiogatun32, radiogatun64,
+                                    sha512_all_zero_messages)
+from CryptoPlus.Util import util
 
 ## HASHING
 
 # SHA-512
 print "SHA-512"
 
-from CryptoPlus.Hash import python_SHA512
 
 for i in range(0,len(sha512_all_zero_messages)):
     hash = sha512_all_zero_messages[i]
@@ -25,7 +38,6 @@ for i in range(0,len(sha512_all_zero_messages)):
 # RadioGatun
 print "RadioGatun"
 
-from CryptoPlus.Hash import python_RadioGatun
 
 for i in range(0,len(radiogatun32)/2):
     msg = radiogatun32["msg%i"%i]
@@ -46,8 +58,6 @@ for i in range(0,len(radiogatun64)/2):
 # PRESENT
 print "PRESENT"
 
-from CryptoPlus.testvectors import dict_present_e80_k12_tvar, dict_present_e128_k12_tvar, dict_present_e128_kvar_t12, dict_present_e80_kvar_t12
-from CryptoPlus.Cipher import python_PRESENT
 
 for i in range(1,len(dict_present_e80_k12_tvar)/3):
     msg = dict_present_e80_k12_tvar['msg%i'%i].decode('hex')
@@ -96,8 +106,6 @@ for i in range(1,len(dict_present_e80_kvar_t12)/3):
 # CBC, CFB, OFB and CTR with AES
 print "AES"
 
-from CryptoPlus.Cipher import python_AES
-from CryptoPlus.Util import util
 
 for i in range(1,len(dict_cbc_aes)/4+1):
     msg = dict_cbc_aes['msg%i'%i].decode('hex')
@@ -153,7 +161,6 @@ for i in range(1,len(dict_cfb_aes)/4+1):
 # DES,TDES2/3
 print "DES TDES2/3"
 
-from CryptoPlus.Cipher import python_DES
 
 for i in range(0,len(dict_des)/3):
     msg = dict_des['msg%i'%i].decode('hex')
@@ -165,7 +172,6 @@ for i in range(0,len(dict_des)/3):
     if msg <> cipher.decrypt(cip):
         print 'DECRYPTION ERROR! for DES in %i'%i
 
-from CryptoPlus.Cipher import python_DES3
 
 for d in dict_tdes2,dict_tdes3:
     for i in range(0,len(d)/3):
@@ -181,7 +187,6 @@ for d in dict_tdes2,dict_tdes3:
 # Serpent128/192/256
 print "Serpent"
 
-from CryptoPlus.Cipher import python_Serpent
 
 for d in dict_serpent128,dict_serpent192,dict_serpent256:
     for i in range(0,len(d)/3):
@@ -197,7 +202,6 @@ for d in dict_serpent128,dict_serpent192,dict_serpent256:
 # CMAC-AES128/192/256
 print "CMAC-AES"
 
-from CryptoPlus.Cipher import python_AES
 
 for d in dict_cmac_aes128,dict_cmac_aes192,dict_cmac_aes256:
     for i in range(0,len(d)/4):
@@ -212,7 +216,6 @@ for d in dict_cmac_aes128,dict_cmac_aes192,dict_cmac_aes256:
 
 # CMAC-TDES2/3
 print "CMAC-TDES"
-from CryptoPlus.Cipher import python_DES3
 
 for d in dict_cmac_tdes2,dict_cmac_tdes3:
     for i in range(0,len(d)/4):
@@ -228,7 +231,6 @@ for d in dict_cmac_tdes2,dict_cmac_tdes3:
 # XTS-AES
 print "XTS-AES"
 
-from CryptoPlus.Cipher import python_AES
 
 for i in range(0,len(dict_xts_aes)/5):
     msg = dict_xts_aes['msg%i'%i].decode('hex')
@@ -247,9 +249,6 @@ for i in range(0,len(dict_xts_aes)/5):
 # TWOFISH
 print "Twofish"
 
-from CryptoPlus.Cipher import python_Twofish
-from CryptoPlus.testvectors import dict_twofish_ecb_vt_k128, dict_twofish_ecb_vt_k192, dict_twofish_ecb_vt_k256
-from CryptoPlus.testvectors import dict_twofish_ecb_vk_k128, dict_twofish_ecb_vk_k192, dict_twofish_ecb_vk_k256
 
 for d in dict_twofish_ecb_vt_k128, dict_twofish_ecb_vt_k192, dict_twofish_ecb_vt_k256,dict_twofish_ecb_vk_k128:
  for i in range(0,len(d)/3):
